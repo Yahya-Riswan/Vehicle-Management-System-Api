@@ -1,0 +1,8 @@
+# Database
+sqlalchemy
+sqlalchemy-libsql
+python-dotenv
+
+# Authentication & Security
+python-jose[cryptography]
+passlib[bcrypt]
