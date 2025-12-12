@@ -1,4 +1,34 @@
-Here is a professional README.md file tailored for your Zeymoto Vehicle Management System API. You can copy and paste this directly into a file named README.md in your api folder or the root folder.🏍️ Zeymoto - Vehicle Management System APIA high-performance, RESTful API built with FastAPI and TiDB (Serverless MySQL) to manage a used bike dealership. This system handles staff authentication, inventory management, and sales tracking.🚀 Tech StackFramework: FastAPI (Python)Database: TiDB Serverless (MySQL Compatible)ORM: SQLAlchemyValidation: PydanticAuthentication: Passlib (Bcrypt)Deployment: Vercel / Render / Local✨ FeaturesStaff Management🔐 Authentication: Secure Login & Registration with password hashing.👥 CRUD Operations: Create, Read, Update, and Delete staff members.🛡️ Role-Based: Tracks staff roles (e.g., Admin, Salesman).Database Integration☁️ Cloud Native: Connects securely to TiDB Cloud using SSL.⚡ Connection Pooling: Optimized for serverless environments to prevent timeouts.📂 Project StructurePlaintext├── api/
+# 🏍️ Vehicle Management System API
+
+A high-performance, RESTful API built with **FastAPI** and **TiDB (Serverless MySQL)** to manage a used bike dealership. This system handles staff authentication, inventory management, and sales tracking.
+
+## 🚀 Tech Stack
+
+* **Framework:** [FastAPI](https://fastapi.tiangolo.com/) (Python)
+* **Database:** [TiDB Serverless](https://tidbcloud.com/) (MySQL Compatible)
+* **ORM:** [SQLAlchemy](https://www.sqlalchemy.org/)
+* **Validation:** [Pydantic](https://docs.pydantic.dev/)
+* **Authentication:** Passlib (Bcrypt)
+* **Deployment:** Vercel / Render / Local
+
+---
+
+## ✨ Features
+
+* **Staff Management**
+    * 🔐 **Authentication:** Secure Login & Registration with password hashing.
+    * 👥 **CRUD Operations:** Create, Read, Update, and Delete staff members.
+    * 🛡️ **Role-Based:** Tracks staff roles (e.g., Admin, Salesman).
+* **Database Integration**
+    * ☁️ **Cloud Native:** Connects securely to TiDB Cloud using SSL.
+    * ⚡ **Connection Pooling:** Optimized for serverless environments to prevent timeouts.
+
+---
+
+## 📂 Project Structure
+
+```text
+├── api/
 │   ├── database.py       # Database connection & session handling
 │   ├── index.py          # Main application entry point
 │   ├── models/           # SQLAlchemy Database Models (Tables)
@@ -12,9 +42,26 @@ Here is a professional README.md file tailored for your Zeymoto Vehicle Manageme
 ├── .env                  # Environment Variables (Secrets)
 ├── requirements.txt      # Python Dependencies
 └── vercel.json           # Deployment Configuration
-🛠️ Installation & Setup1. PrerequisitesPython 3.9 or higherA TiDB Cloud Account (Free Tier is sufficient)2. Clone the RepositoryBashgit clone https://github.com/your-username/zeymoto-api.git
+```
+
+---
+
+## 🛠️ Installation & Setup
+
+### 1. Prerequisites
+* Python 3.9 or higher
+* A TiDB Cloud Account (Free Tier is sufficient)
+
+### 2. Clone the Repository
+```bash
+git clone [https://github.com/your-username/zeymoto-api.git](https://github.com/your-username/zeymoto-api.git)
 cd zeymoto/api
-3. Install DependenciesIt is recommended to use a virtual environment.Bash# Create virtual environment (optional)
+```
+
+### 3. Install Dependencies
+It is recommended to use a virtual environment.
+```bash
+# Create virtual environment (optional)
 python -m venv venv
 # Activate it (Windows)
 .\venv\Scripts\activate
@@ -23,10 +70,74 @@ source venv/bin/activate
 
 # Install libraries
 pip install -r ../requirements.txt
-4. Configuration (.env)Create a .env file in the root directory (next to api/) or inside api/ depending on your run context. Add your TiDB credentials:Ini, TOMLTIDB_HOST=gateway01.ap-southeast-1.prod.aws.tidbcloud.com
+```
+
+### 4. Configuration (`.env`)
+Create a `.env` file in the `api` directory. Add your TiDB credentials:
+
+```ini
+TIDB_HOST=gateway01.ap-southeast-1.prod.aws.tidbcloud.com
 TIDB_USER=your_tidb_user
 TIDB_PASSWORD=your_tidb_password
 TIDB_PORT=4000
 TIDB_DATABASE=test
-🏃‍♂️ Running LocallyTo start the server, run the following command from the api folder:Bashuvicorn index:app --reload
-Server URL: http://127.0.0.1:8000Interactive Docs: http://127.0.0.1:8000/docs (Swagger UI)Alternative Docs: http://127.0.0.1:8000/redoc🔌 API EndpointsStaff (/staff)MethodEndpointDescriptionGET/staff/Get list of all staff membersPOST/staff/registerRegister a new staff memberGET/staff/loginLogin (Returns staff details on success)GET/staff/{id}Get specific staff detailsPUT/staff/{id}Update staff informationDELETE/staff/{id}Remove a staff member⚠️ Common Issues & Fixes1. ModuleNotFoundError: No module named 'routers'Fix: Ensure you are running uvicorn from the correct directory. If you are inside the api folder, use uvicorn index:app --reload. If you are outside, use uvicorn api.index:app --reload.2. SSL: CERTIFICATE_VERIFY_FAILEDFix: The database.py file includes a smart switch. It automatically disables strict SSL verification when running on local Windows machines while keeping it secure for production.3. ValueError: password cannot be longer than 72 bytesFix: This is a version conflict between passlib and bcrypt. Run pip install "bcrypt==4.0.1" to fix it.🚀 Deployment (Vercel)Install Vercel CLI: npm i -g vercelLogin: vercel loginDeploy: vercelImportant: Go to Vercel Dashboard -> Settings -> Environment Variables and add all your .env values there (TIDB_HOST, TIDB_PASSWORD, etc.).📜 LicenseThis project is licensed under the MIT License.
+```
+
+---
+
+## 🏃‍♂️ Running Locally
+
+To start the server, run the following command from the **`api`** folder:
+
+```bash
+uvicorn index:app --reload
+```
+
+* **Server URL:** `http://127.0.0.1:8000`
+* **Interactive Docs:** `http://127.0.0.1:8000/docs` (Swagger UI)
+* **Alternative Docs:** `http://127.0.0.1:8000/redoc`
+
+---
+
+## 🔌 API Endpoints
+
+### Staff (`/staff`)
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/staff/` | Get list of all staff members |
+| `POST` | `/staff/register` | Register a new staff member |
+| `GET` | `/staff/login` | Login (Returns staff details on success) |
+| `GET` | `/staff/{id}` | Get specific staff details |
+| `PUT` | `/staff/{id}` | Update staff information |
+| `DELETE` | `/staff/{id}` | Remove a staff member |
+
+---
+
+## ⚠️ Common Issues & Fixes
+
+**1. `AttributeError: module 'bcrypt' has no attribute '__about__'`**
+* **Cause:** Incompatibility between `passlib` and newer versions of `bcrypt`.
+* **Fix:** Downgrade bcrypt to a compatible version:
+  ```bash
+  pip install "bcrypt==4.0.1"
+  ```
+
+**2. `ModuleNotFoundError: No module named 'routers'`**
+* **Fix:** Ensure you are running `uvicorn` from the correct directory. If you are inside the `api` folder, use `uvicorn index:app --reload`.
+
+**3. `SSL: CERTIFICATE_VERIFY_FAILED`**
+* **Fix:** The `database.py` file includes a smart switch. It automatically disables strict SSL verification when running on local Windows machines while keeping it secure for production.
+
+---
+
+## 🚀 Deployment (Vercel)
+
+1.  Install Vercel CLI: `npm i -g vercel`
+2.  Login: `vercel login`
+3.  Deploy: `vercel`
+4.  **Important:** Go to Vercel Dashboard -> Settings -> Environment Variables and add all your `.env` values there (`TIDB_HOST`, `TIDB_PASSWORD`, etc.).
+
+---
+
+## 📜 License
+This project is licensed under the MIT License.
