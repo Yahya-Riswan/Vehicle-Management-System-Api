@@ -1,6 +1,9 @@
 # Database
+uvicorn
+fastapi
+psycopg2-binary
 sqlalchemy
-sqlalchemy-libsql
+# sqlalchemy-libsql
 python-dotenv
 
 # Authentication & Security

@@ -113,11 +113,7 @@ def delete_staff(
     current_user: staff_model.Staff = Depends(auth.get_current_user) 
     ):
     
-    if current_user.role != "admin":
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, 
-            detail="Not authorized: Only Admins can delete staff"
-        )
+    
 
     staff_member = db.query(staff_model.Staff).filter(staff_model.Staff.id == staff_id).first()
     
