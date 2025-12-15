@@ -5,7 +5,7 @@ psycopg2-binary
 sqlalchemy
 # sqlalchemy-libsql
 python-dotenv
-
+sqlalchemy-libsql
 # Authentication & Security
 python-jose[cryptography]
 passlib[bcrypt]
