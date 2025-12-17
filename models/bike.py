@@ -14,11 +14,12 @@ class Bike(Base):
     mfg_year = Column(Integer, nullable=True)
     color = Column(String, nullable=True)
     odometer_km = Column(Integer, nullable=True)
-    
+    type = Column(String(20), nullable=True)
+    owner_serial = Column(String(50), nullable=True)
     # Registration & Legal 
     reg_number = Column(String, unique=True, index=True, nullable=False)
-    chassis_number = Column(String, unique=True, nullable=True)
-    engine_number = Column(String, unique=True, nullable=True)
+    chassis_number = Column(String, unique=False, nullable=True)
+    engine_number = Column(String, unique=False, nullable=True)
     owner_serial = Column(Integer, nullable=True) # e.g., 1st owner, 2nd owner
     
     # Dates

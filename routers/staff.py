@@ -9,7 +9,14 @@ from schemas import staff as staff_schema
 from schemas import token as token_schema
 from models import staff as staff_model
 import auth 
+from pydantic import BaseModel
 
+class ChangePasswordRequest(BaseModel):
+    new_password: str
+
+class AdminContactResponse(BaseModel):
+    phone: str
+    
 router = APIRouter(
     prefix="/staff",
     tags=["Staff"]
@@ -66,7 +73,11 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
    
     access_token = auth.create_access_token(data={"sub": staff_member.username})
     
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {
+        "access_token": access_token, 
+        "token_type": "bearer",
+        "user": staff_member 
+    }
 
 
 
@@ -77,7 +88,7 @@ def get_staff_by_id(
     current_user: staff_model.Staff = Depends(auth.get_current_user) 
     ):
     
-    staff_member = db.query(staff_model.Staff).filter(staff_model.Staff.id == staff_id).first()
+    staff_member = db.query(staff_model.Staff).filter(staff_model.Staff.staff_id == staff_id).first()
     
     if not staff_member:
         raise HTTPException(status_code=404, detail="Staff member not found")
@@ -92,7 +103,7 @@ def update_staff(
     current_user: staff_model.Staff = Depends(auth.get_current_user) 
     ):
     
-    staff_member = db.query(staff_model.Staff).filter(staff_model.Staff.id == staff_id).first()
+    staff_member = db.query(staff_model.Staff).filter(staff_model.Staff.staff_id == staff_id).first()
     
     if not staff_member:
         raise HTTPException(status_code=404, detail="Staff member not found")
@@ -115,7 +126,7 @@ def delete_staff(
     
     
 
-    staff_member = db.query(staff_model.Staff).filter(staff_model.Staff.id == staff_id).first()
+    staff_member = db.query(staff_model.Staff).filter(staff_model.Staff.staff_id == staff_id).first()
     
     if not staff_member:
         raise HTTPException(status_code=404, detail="Staff member not found")
@@ -124,3 +135,36 @@ def delete_staff(
     db.commit()
     
     return
+
+@router.put("/{staff_id}/change-password/")
+def change_password(
+    staff_id: int,
+    password_data: ChangePasswordRequest,
+    db: Session = Depends(database.get_db),
+    current_user: staff_model.Staff = Depends(auth.get_current_user)
+):
+    # 1. Find the staff member
+    staff_member = db.query(staff_model.Staff).filter(staff_model.Staff.staff_id == staff_id).first()
+    
+    if not staff_member:
+        raise HTTPException(status_code=404, detail="Staff member not found")
+    
+    # 2. Hash the new password
+    hashed_pw = auth.hash_password(password_data.new_password)
+    
+    # 3. Update the database
+    staff_member.password_hash = hashed_pw
+    db.commit()
+    
+    return {"message": "Password updated successfully"}
+
+@router.get("/public/admin-contact", response_model=AdminContactResponse)
+def get_public_admin_contact(db: Session = Depends(database.get_db)):
+    
+    # Search for the user with username "admin"
+    admin_user = db.query(staff_model.Staff).filter(staff_model.Staff.username == "admin").first()
+    
+    if not admin_user:
+        raise HTTPException(status_code=404, detail="Admin contact info not found")
+        
+    return { "phone": admin_user.phone }

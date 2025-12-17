@@ -2,6 +2,7 @@ from fastapi import FastAPI
 import database
 import models
 from routers import staff,bike,bike_images,customer,bike_expenses,general_expenses,sale
+from fastapi.middleware.cors import CORSMiddleware
 
 database.Base.metadata.create_all(bind=database.engine)
 
@@ -19,6 +20,13 @@ app = FastAPI(
     },
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],        # List of allowed origins
+    allow_credentials=True,
+    allow_methods=["*"],          # Allow all methods (GET, POST, DELETE, etc.)
+    allow_headers=["*"],          # Allow all headers
+)
 app.include_router(staff.router)
 app.include_router(bike.router)
 app.include_router(bike_images.router)

@@ -17,19 +17,3 @@ class BikeImageResponse(BikeImageBase):
     class Config:
         from_attributes = True
 
-# --- Bike Schemas ---
-class BikeBase(BaseModel):
-    make: str
-    model: str
-    # ... (other fields) ...
-
-class BikeCreate(BikeBase):
-    pass
-
-class BikeResponse(BikeBase):
-    bike_id: int
-    # The API will now return a list of image objects inside the bike object
-    images: List[BikeImageResponse] = [] 
-
-    class Config:
-        from_attributes = True

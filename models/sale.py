@@ -11,7 +11,7 @@ class Sale(Base):
     # Relationships
     bike_id = Column(Integer, ForeignKey("bikes.bike_id"), unique=True, nullable=False) # One bike can only be sold once
     customer_id = Column(Integer, ForeignKey("customers.customer_id"), nullable=False)
-    salesman_id = Column(Integer, ForeignKey("staff.staff_id"), nullable=True) # Assuming you have a staff table
+    salesman_id = Column(Integer, ForeignKey("staff.staff_id"), nullable=True)
 
     # Sale Details
     sale_date = Column(Date, server_default=func.current_date())
