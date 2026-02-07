@@ -8,7 +8,7 @@ import re
 import uuid
 from typing import List, Optional
 from pydantic import BaseModel
-
+import pymysql.cursors
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -80,7 +80,8 @@ async def add_collection(name: str):
 async def read_collection(name: str, limit: int = 100):
     table = validate_name(name)
     conn = get_db()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+
     try:
         cursor.execute(f"SHOW TABLES LIKE '{table}'")
         if not cursor.fetchone(): return []
@@ -164,7 +165,7 @@ async def read_document(collection: str, doc_id: str):
     """Reads a single document"""
     table = validate_name(collection)
     conn = get_db()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     try:
         cursor.execute(f"SHOW TABLES LIKE '{table}'")
         if not cursor.fetchone(): return None
@@ -182,7 +183,8 @@ async def edit_document(collection: str, doc_id: str, data: dict = Body(...)):
     """Edits specific fields (Merge Update)"""
     table = validate_name(collection)
     conn = get_db()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+
     try:
         # 1. Fetch existing
         cursor.execute(f"SELECT doc FROM {table} WHERE id=%s", (doc_id,))
@@ -223,7 +225,8 @@ async def query_collection(collection: str, query: QueryRequest):
     """
     table = validate_name(collection)
     conn = get_db()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+
     
     try:
         # Check table existence
